@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smog Tracker</title>
+</head>
+<body>
+    <h1>Smog Tracker</h1>
+    <form id="location-form">
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required>
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state">
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" required>
+        <button type="submit">Get Air Quality Data</button>
+    </form>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('location-form').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const city = document.getElementById('city').value.trim();
+            const state = document.getElementById('state').value.trim();
+            const country = document.getElementById('country').value.trim();
+
+            if (!city || !country) {
+                document.getElementById('results').innerText = "Please fill in the city and country fields.";
+                return;
+            }
+
+            try {
+                const url = `/get_data?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}${state ? `&state=${encodeURIComponent(state)}` : ''}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                const aqi = data.list[0].main.aqi;
+                const components = data.list[0].components;
+
+                let resultsHtml = `<h2>Air Quality Data</h2>`;
+                let aqiDescription;
+                switch(aqi) {
+                    case 1:
+                        aqiDescription = 'Good: Air quality is considered satisfactory, and air pollution poses little or no risk.';
+                        break;
+                    case 2:
+                        aqiDescription = 'Fair: Air quality is acceptable; however, for some pollutants, there may be a concern for a very small number of people.';
+                        break;
+                    case 3:
+                        aqiDescription = 'Moderate: Air quality is acceptable; however, some pollutants may be a concern for some people.';
+                        break;
+                    case 4:
+                        aqiDescription = 'Poor: Air quality is likely to affect health for some sensitive groups.';
+                        break;
+                    case 5:
+                        aqiDescription = 'Very Poor: Health warnings of emergency conditions. The entire population is more likely to be affected.';
+                        break;
+                    default:
+                        aqiDescription = 'Data unavailable or outside known AQI range.';
+                }
+
+                resultsHtml += `<p><strong>AQI: ${aqi}</strong> (${aqiDescription})</p>`;
+                resultsHtml += `<h3>Pollutants:</h3>`;
+                resultsHtml += `<ul>`;
+                for (const [pollutant, value] of Object.entries(components)) {
+                    resultsHtml += `<li>${pollutant.toUpperCase()}: ${value} µg/m³</li>`;
+                }
+                resultsHtml += `</ul>`;
+                resultsHtml += `<p>Note: All values are in micrograms per cubic meter (µg/m³).</p>`;
+                
+                document.getElementById('results').innerHTML = resultsHtml;
+            } catch (error) {
+                document.getElementById('results').innerText = `Error fetching data: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
