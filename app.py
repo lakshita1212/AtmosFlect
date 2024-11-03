@@ -23,7 +23,6 @@ def get_current_air_pollution(lat, lon, API_key):
     return res  
 
 @app.route('/')
-<<<<<<< HEAD
 def home():
     return render_template('home.html')  
 
@@ -34,10 +33,6 @@ def show_map():
 @app.route('/historical_data')
 def historical_data():
     return render_template('historical.html')
-=======
-def index():
-    return render_template('map.html')  
->>>>>>> b687cf82c586d8f7bae7751dce907c3cf4730ce9
 
 @app.route('/api_key')
 def get_api_key():
