@@ -1,7 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 
 # Load environment variables
 load_dotenv()
@@ -24,13 +24,14 @@ def get_current_air_pollution(lat, lon, API_key):
 
 @app.route('/')
 def index():
-    return render_template('index.html')  
+    return send_from_directory('.', 'index.html') 
+
 
 @app.route('/map')
 def show_map():
     return render_template('map.html')
 
-@app.route('/historical_data')
+@app.route('/historical')
 def historical_data():
     return render_template('historical.html')
 
