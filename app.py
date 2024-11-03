@@ -23,8 +23,8 @@ def get_current_air_pollution(lat, lon, API_key):
     return res  
 
 @app.route('/')
-def home():
-    return render_template('home.html')  
+def index():
+    return render_template('index.html')  
 
 @app.route('/map')
 def show_map():

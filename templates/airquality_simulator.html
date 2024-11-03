@@ -7,12 +7,17 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <title>Air Quality Tracker</title>
 </head>
+<audio autoplay loop playsinline id="background-audio">
+    <source src="{{ url_for('static', filename='music.mp3') }}" type="audio/mpeg">
+    Your browser does not support the audio tag.
+  </audio>
+
 <body>
     <div class="container">
         <header>
             <h1>Air Quality Tracker</h1>
             <nav>
-                <button onclick="window.location.href='{{ url_for('home') }}'">Home</button>
+                <button onclick="window.location.href='{{ url_for('index') }}'">Home</button>
                 <button onclick="window.location.href='{{ url_for('show_map') }}'">Explore Map</button>
                 <button onclick="window.location.href='{{ url_for('historical_data') }}'">Historical Data</button>
                 <button onclick="window.location.href='{{ url_for('airquality_simulator') }}'">Air Quality Simulator</button>
