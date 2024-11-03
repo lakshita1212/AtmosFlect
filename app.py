@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask import Flask, render_template, request, jsonify
 
+# Load environment variables
 load_dotenv()
 api_key = os.getenv('API_KEY')
 
@@ -13,10 +14,8 @@ def get_lat_long(city_name, state_code, country_code, API_key):
     if res:
         latitude = res[0].get('lat')
         longitude = res[0].get('lon')
-        print(f"Latitude: {latitude}, Longitude: {longitude}")
         return latitude, longitude 
     else:
-        print("Location not found.")
         return None, None 
 
 def get_current_air_pollution(lat, lon, API_key):
@@ -25,9 +24,7 @@ def get_current_air_pollution(lat, lon, API_key):
 
 @app.route('/')
 def index():
-    print("Current Working Directory:", os.getcwd()) 
-    print("Templates Directory:", os.listdir('templates'))  
-    return render_template('index.html')  
+    return render_template('map.html')  
 
 @app.route('/api_key')
 def get_api_key():
