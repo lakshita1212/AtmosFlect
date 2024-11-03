@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smog Tracker</title>
+
+<link rel="stylesheet" type="text/css" href="styles.css">
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<link rel="icon" type="image/png" href="C:\Users\dasdh\OneDrive\Desktop\UNIVERSITY\comp science\hacknjit\images\Screenshot 2024-11-02 131009.png">
+
+
+</head>
+
+<body>
+    <h1>Smog Levels in Your Area</h1>
+    <div class="search-box">
+        <input type="text" id="city" placeholder="Enter City" class="search-input">
+        <button onclick="fetchAQIData()">Search</button>
+    </div>
+
+    <div class="clock">
+        <div class="hand hour-hand"></div>
+        <div class="hand minute-hand"></div>
+        <div class="hand second-hand"></div>
+    </div>
+    <label for="date-input">Choose a Date and Time:</label>
+    <input type="datetime-local" id="date-input" onchange="updateSliderAndClock()">
+
+    <label for="time-slider">Travel Back in Time</label>
+    <input type="range" id="time-slider" min="0" max="23" value="0" oninput="updateClock(this.value)">
+    
+    
+    <script src="script.js"></script>
+    <audio id="background-audio" audioplay loop>
+        <source src="C:\Users\dasdh\OneDrive\Desktop\UNIVERSITY\comp science\hacknjit\audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</body>
+</html>

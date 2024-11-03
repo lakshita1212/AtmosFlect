@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <video autoplay loop muted playsinline id="background-video">
+        <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <header>
+        <h1 class ="welcome">Welcome to the AQI Tracker</h1>
+    </header>
+
+    <main>
+        <p>Your guide to air quality and historical data insights.</p>
+        <div class="button-container">
+            <button id="viewMap">Explore Interactive Map</button>
+            <button id="viewHistorical">View Historical Data</button>
+        </div>
+    </main>
+
+    <div class="floating-element">
+        <blockquote>
+            "Breathe easy, travel safely."
+        </blockquote>
+    </div>
+
+    <script>
+        document.getElementById("viewMap").onclick = function() {
+            window.location.href = "{{ url_for('show_map') }}";
+        };
+        document.getElementById("viewHistorical").onclick = function() {
+            window.location.href = "{{ url_for('historical_data') }}";
+        };
+    </script>
+</body>
+</html>

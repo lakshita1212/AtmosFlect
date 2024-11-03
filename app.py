@@ -13,10 +13,8 @@ def get_lat_long(city_name, state_code, country_code, API_key):
     if res:
         latitude = res[0].get('lat')
         longitude = res[0].get('lon')
-        print(f"Latitude: {latitude}, Longitude: {longitude}")
         return latitude, longitude 
     else:
-        print("Location not found.")
         return None, None 
 
 def get_current_air_pollution(lat, lon, API_key):
@@ -24,14 +22,19 @@ def get_current_air_pollution(lat, lon, API_key):
     return res  
 
 @app.route('/')
-def index():
-    print("Current Working Directory:", os.getcwd()) 
-    print("Templates Directory:", os.listdir('templates'))  
-    return render_template('index.html')  
+def home():
+    return render_template('home.html')  
+
+@app.route('/map')
+def show_map():
+    return render_template('map.html')
+
+@app.route('/historical_data')
+def historical_data():
+    return render_template('historical.html')
 
 @app.route('/api_key')
 def get_api_key():
-    """Endpoint to get the API key."""
     return jsonify({'api_key': api_key})
 
 @app.route('/get_data', methods=['GET'])
