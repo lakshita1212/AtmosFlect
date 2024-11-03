@@ -1,8 +1,15 @@
+// Select clock hands
 const hourHand = document.querySelector('.hour-hand');
 const minuteHand = document.querySelector('.minute-hand');
 const secondHand = document.querySelector('.second-hand');
 
-// Function to update slider and clock based on date input
+// Audio player controls
+const audioPlayer = document.getElementById('audio-player');
+const playButton = document.getElementById('play-button');
+const pauseButton = document.getElementById('pause-button');
+const stopButton = document.getElementById('stop-button');
+
+// Function to update the clock based on date input
 function updateSliderAndClock() {
     const dateInput = document.getElementById('date-input').value;
     const slider = document.getElementById('time-slider');
@@ -11,34 +18,44 @@ function updateSliderAndClock() {
         const selectedDate = new Date(dateInput);
         const hours = selectedDate.getHours();
 
-        // Update slider to match the chosen hour from the date
+        // Update slider and clock
         slider.value = hours;
-
-        // Update the clock to reflect the chosen date and time
         updateClock();
     }
 }
 
-// Function to update clock hands based on the slider's hour value
+// Function to update clock hands based on the slider's value
 function updateClock() {
     const sliderValue = document.getElementById('time-slider').value;
 
-    // Convert the slider value (hours) to rotation angles for the clock hands
+    // Calculate angles for clock hands
     const hourAngle = -(sliderValue % 12) * 30; // 30 degrees per hour
-    const minuteAngle = -((sliderValue * 60) % 360); // Full 360 for each hour
-    const secondAngle = -((sliderValue * 3600) % 60) * 6; // Full 360 for each 60 seconds
+    const minuteAngle = 0; // Set minute to 0 for simplicity
+    const secondAngle = 0; // Set second to 0 for simplicity
 
-    // Apply rotation to each hand
-    hourHand.style.transform = rotate(${hourAngle}deg);
-    minuteHand.style.transform = rotate(${minuteAngle}deg);
-    secondHand.style.transform = rotate(${secondAngle}deg);
+    // Rotate clock hands
+    hourHand.style.transform = `rotate(${hourAngle}deg)`;
+    minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
+    secondHand.style.transform = `rotate(${secondAngle}deg)`;
 }
 
-window.addEventListener('click', function() {
-    const audio = document.getElementById('background-audio');
-    const playAudio = () => {
-        audio.muted = false;
-        audio.play(); // Ensures playback starts
-    };
-
+// Audio playback controls
+playButton.addEventListener('click', () => audioPlayer.play());
+pauseButton.addEventListener('click', () => audioPlayer.pause());
+stopButton.addEventListener('click', () => {
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
 });
+
+// Allow audio to play on user interaction
+window.addEventListener('click', () => {
+    const audio = document.getElementById('background-audio');
+    audio.muted = false;
+    audio.play(); // Start playback on user action
+});
+
+// Event listener for the date input change
+document.getElementById('date-input').addEventListener('change', updateSliderAndClock);
+
+// Event listener for the time slider input
+document.getElementById('time-slider').addEventListener('input', updateClock);

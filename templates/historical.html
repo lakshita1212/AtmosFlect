@@ -3,38 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <title>Smog Tracker</title>
-
-<link rel="stylesheet" type="text/css" href="styles.css">
-<script src="{{ url_for('static', filename='script.js') }}"></script>
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
-<link rel="icon" type="image/png" href="C:\Users\dasdh\OneDrive\Desktop\UNIVERSITY\comp science\hacknjit\images\Screenshot 2024-11-02 131009.png">
-
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clock.css') }}">
 </head>
-
 <body>
-    <h1>Smog Levels in Your Area</h1>
-    <div class="search-box">
-        <input type="text" id="city" placeholder="Enter City" class="search-input">
-        <button onclick="fetchAQIData()">Search</button>
+  <audio autoplay loop playsinline id="background-audio">
+    <source src="{{ url_for('static', filename='music.mp3') }}" type="audio/mpeg">
+    Your browser does not support the audio tag.
+  </audio>
+    <header>
+      
+        <h1>Historical AQI Tracker</h1>
+        <nav>
+            <button onclick="window.location.href='{{ url_for('home') }}'">Home</button>
+            <button onclick="window.location.href='{{ url_for('show_map') }}'">Explore Map</button>
+            <button onclick="window.location.href='{{ url_for('historical_data') }}'">Historical Data</button>
+            <button onclick="window.location.href='{{ url_for('airquality_simulator') }}'">Air Quality Simulator</button>
+            <button onclick="window.location.href='{{ url_for('about') }}'">About Us</button>
+        </nav>
+    </header>
+    <div class="gear-container">
+      <img src="{{ url_for('static', filename='images/gear1.png') }}" class="gear large gear-1" alt="Gear">
+      <img src="{{ url_for('static', filename='images/gear2.png') }}" class="gear medium gear-2" alt="Gear">
+      <img src="{{ url_for('static', filename='images/gear3.png') }}" class="gear small gear-3" alt="Gear">
+      <img src="{{ url_for('static', filename='images/gear1.png') }}" class="gear large gear-4" alt="Gear">
+      <img src="{{ url_for('static', filename='images/gear2.png') }}" class="gear medium gear-5" alt="Gear">
+      <img src="{{ url_for('static', filename='images/gear3.png') }}" class="gear small gear-6" alt="Gear">
+      <img src="{{ url_for('static', filename='images/gear1.png') }}" class="gear large gear-7" alt="Gear">
+      <img src="{{ url_for('static', filename='images/gear2.png') }}" class="gear medium gear-8" alt="Gear">
+  </div>
+
+    <div class="container">
+        <h1>Smog Levels in Your Area</h1>
+        <div class="search-box">
+            <input type="text" id="city" placeholder="Enter City, e.g Edison" class="search-input">
+            <input type="text" id="state" placeholder="Enter State, e.g New Jersey" class="search-input">
+            <input type="text" id="country" placeholder="Enter Country, e.g USA" class="search-input">
+            <button id="submitBtn">Search</button>
+        </div>
+
+        <div id="aqiDisplay"></div>
+
+        <div class="clock">
+            <div class="hand hour-hand"></div>
+            <div class="hand minute-hand"></div>
+            <div class="hand second-hand"></div>
+        </div>
+        <label for="date-input">Choose a Date and Time:</label>
+        <input type="datetime-local" id="date-input" onchange="updateSliderAndClock()">
+        <input type="range" id="time-slider" min="0" max="23" value="0" oninput="updateClock()">
+
+        <audio id="background-audio" autoplay loop>
+            <source src="C:\Users\dasdh\OneDrive\Desktop\UNIVERSITY\comp science\hacknjit\audio.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <div id="audio-controls">
+            <div id="audio-controls-text">Audio Controls</div>
+            <button id="play-button">Play</button>
+            <button id="pause-button">Pause</button>
+            <button id="stop-button">Stop</button>
+        </div>
     </div>
 
-    <div class="clock">
-        <div class="hand hour-hand"></div>
-        <div class="hand minute-hand"></div>
-        <div class="hand second-hand"></div>
-    </div>
-    <label for="date-input">Choose a Date and Time:</label>
-    <input type="datetime-local" id="date-input" onchange="updateSliderAndClock()">
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script>
+        document.getElementById("submitBtn").addEventListener("click", async () => {
+            const city = document.getElementById("city").value;
+            const state = document.getElementById("state").value;
+            const country = document.getElementById("country").value;
 
-    <label for="time-slider">Travel Back in Time</label>
-    <input type="range" id="time-slider" min="0" max="23" value="0" oninput="updateClock(this.value)">
-    
-    
-    <script src="script.js"></script>
-    <audio id="background-audio" audioplay loop>
-        <source src="C:\Users\dasdh\OneDrive\Desktop\UNIVERSITY\comp science\hacknjit\audio.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+            if (city && country) {
+                const outputData = await fetchAQIData(city, state, country);
+                if (outputData) {
+                    updateSidebar(city, state, country, outputData);
+                }
+            } else {
+                alert("Please enter at least a city and country code.");
+            }
+        });
+
+        async function fetchAQIData(city, state, country) {
+            const response = await fetch(`/get_data?city=${city}&state=${state}&country=${country}`);
+            const data = await response.json();
+            if (data.error) {
+                alert(data.error);
+                return null;
+            } else {
+                return {
+                    aqi: data.list[0].main.aqi,
+                    components: data.list[0].components
+                };
+            }
+        }
+
+        function updateSidebar(city, state, country, outputData) {
+            const aqiDisplay = document.getElementById("aqiDisplay");
+            const locationInfo = document.createElement("div");
+            locationInfo.classList.add("aqi-data");
+
+            let aqiDescription;
+            switch (outputData.aqi) {
+                case 1:
+                    aqiDescription = 'Good: Air quality is considered satisfactory.';
+                    break;
+                case 2:
+                    aqiDescription = 'Fair: Air quality is acceptable; however, there may be concerns for some pollutants.';
+                    break;
+                case 3:
+                    aqiDescription = 'Moderate: Some pollutants may be a concern for some people.';
+                    break;
+                case 4:
+                    aqiDescription = 'Poor: Air quality is likely to affect health for sensitive groups.';
+                    break;
+                case 5:
+                    aqiDescription = 'Very Poor: Health warnings of emergency conditions.';
+                    break;
+                default:
+                    aqiDescription = 'Data unavailable.';
+            }
+
+            locationInfo.innerHTML = `<strong>${city}, ${state ? state + ', ' : ''}${country}</strong><br><strong>AQI: ${outputData.aqi}</strong> (${aqiDescription})<br>`;
+            locationInfo.innerHTML += `<h4>Pollutants:</h4><ul>`;
+            for (const [pollutant, value] of Object.entries(outputData.components)) {
+                locationInfo.innerHTML += `<li>${pollutant.toUpperCase()}: ${value} µg/m³</li>`;
+            }
+            locationInfo.innerHTML += `</ul>`;
+
+            aqiDisplay.innerHTML = '';
+            aqiDisplay.appendChild(locationInfo);
+        }
+
+        const audioPlayer = document.getElementById('background-audio');
+        document.getElementById('play-button').addEventListener('click', () => audioPlayer.play());
+        document.getElementById('pause-button').addEventListener('click', () => audioPlayer.pause());
+        document.getElementById('stop-button').addEventListener('click', () => {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+        });
+    </script>
 </body>
 </html>
