@@ -7,16 +7,15 @@
 
 body {
     font-family: 'Steampunk', sans-serif;
-    height: 100vh;
-    margin: 0;
     color: #f0e0d4;
+    margin: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative;
-    overflow: hidden;
-    background: url('{{ url_for("static", filename="images/city.jpg") }}') center center/cover no-repeat;
+    min-height: 100vh; /* Ensure full viewport height */
+    height: 100vh;
 }
 
 #background-video {
@@ -66,7 +65,6 @@ button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-
 button:hover {
     background-color: #A97142;
     transform: translateY(-2px);
@@ -86,7 +84,6 @@ header button:hover {
     background-color: #70452C;
     color: #FFF1D8;
 }
-
 
 h1 {
     font-size: 3em;
@@ -185,53 +182,22 @@ a:hover {
     background-color: red;
 }
 
-body {
-    font-family: 'Steampunk', sans-serif;
-    color: #f0e0d4;
-    margin: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#background-video {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-}
-
-header {
-    background-color: #000000;
-    color: #E6D3B5;
-    padding: 20px;
-    width: 100%;
-    text-align: center;
-}
-
-h1 {
-    font-size: 2.5em;
-    margin: 0;
-    color: #D4AF37;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
-}
-
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     max-width: 800px;
+    width: 90%; /* Adjust as needed */
     padding: 40px;
     z-index: 1;
     background: rgba(0, 0, 0, 0.6);
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    position: absolute; /* Add this */
+    top: 50%; /* Add this */
+    left: 50%; /* Add this */
+    transform: translate(-50%, -50%); /* Add this */
 }
 
 main p {
@@ -242,24 +208,27 @@ main p {
 
 .button-container {
     display: flex;
-    gap: 15px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+footer {
+    text-align: center;
+    padding: 10px 0; 
+    background-color: black;
+    color: white;
+    margin-top: auto; 
+    width: 100%;
+    font-size: 0.9em; 
+    line-height: 1.3; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
 }
 
-button {
-    padding: 12px 20px;
-    font-size: 1.1em;
-    border: 1px solid #8B5E3B;
-    border-radius: 5px;
-    background-color: #3B2F2F;
-    color: #E6D3B5;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-button:hover {
-    background-color: #A97142;
-    transform: translateY(-3px);
+footer p {
+    margin: 0; 
 }
 
 .floating-element {
@@ -273,8 +242,71 @@ button:hover {
 }
 
 .welcome {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 15px 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
 }
+
+#typing-animation-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    color: beige;
+    margin: 20px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid beige;
+    max-width: 800px;
+    animation: typing 10s steps(40) forwards, blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink {
+    50% { border-color: transparent; }
+}
+
+.line {
+    display: block;
+    animation: typing 4s steps(30) forwards, blink 0.75s step-end infinite;
+    overflow: hidden;
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    justify-items: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 15px;
+    font-size: 1em;
+    cursor: pointer;
+    width: 150px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: #62350b;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #d49b68;
+}
+

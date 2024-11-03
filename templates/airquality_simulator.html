@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <title>AirQuality Simulator</title>
+</head>
+<body>
+    <header>
+        <h1>Air Quality Simulator</h1>
+        <p>Explore how different scenarios affect air quality!</p>
+    </header>
+    <main>
+        <section id="simulation-controls">
+            <h2>Adjust Scenarios</h2>
+            <div class="control">
+                <label for="carUsage">Car Usage Reduction (%):</label>
+                <input type="range" id="carUsage" class="input-slider" min="0" max="100" value="50">
+                <span id="carUsageValue">50%</span>
+                <p>Imagine a city where 50% fewer cars are driving around! What if we all decided to carpool more or use public transport?</p>
+            </div>
+            <div class="control">
+                <label for="greenSpaces">Increase Green Spaces (%):</label>
+                <input type="range" id="greenSpaces" class="input-slider" min="0" max="100" value="50">
+                <span id="greenSpacesValue">50%</span>
+                <p>What if we added a few parks? How would a 50% increase in greenery change our city’s atmosphere?</p>
+            </div>
+            <div class="control">
+                <label for="newTrees">New Trees or Plants Planted (%):</label>
+                <input type="range" id="newTrees" class="input-slider" min="0" max="100" value="50">
+                <span id="newTreesValue">50%</span>
+                <p>Imagine if every neighborhood planted more trees. What if we could add 100 new trees to our community? How would that affect the air quality?</p>
+            </div>
+        </section>
+        
+        <section id="visualizations">
+            <h2>Air Quality Visualizations</h2>
+            <div id="pollutantChart" class="chart-container">
+                <canvas id="pollutantCanvas"></canvas>
+            </div>
+            <div id="impactMetrics" class="impact-metrics">
+                <h3>Projected Air Quality Metrics:</h3>
+                <ul>
+                    <li>PM2.5 Levels: <span id="pm25Level">--</span> µg/m³</li>
+                    <li>CO2 Levels: <span id="co2Level">--</span> ppm</li>
+                    <li>Ozone Levels: <span id="ozoneLevel">--</span> ppb</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>2024 Air Quality Tracker</p>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script>
+        const carUsageSlider = document.getElementById('carUsage');
+        const carUsageValue = document.getElementById('carUsageValue');
+        carUsageSlider.addEventListener('input', () => {
+            carUsageValue.textContent = `${carUsageSlider.value}%`;
+        });
+
+        const greenSpacesSlider = document.getElementById('greenSpaces');
+        const greenSpacesValue = document.getElementById('greenSpacesValue');
+        greenSpacesSlider.addEventListener('input', () => {
+            greenSpacesValue.textContent = `${greenSpacesSlider.value}%`;
+        });
+
+        const newTreesSlider = document.getElementById('newTrees');
+        const newTreesValue = document.getElementById('newTreesValue');
+        newTreesSlider.addEventListener('input', () => {
+            newTreesValue.textContent = `${newTreesSlider.value}%`;
+        });
+    </script>
+</body>
+</html>

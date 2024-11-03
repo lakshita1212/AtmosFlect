@@ -34,6 +34,16 @@ def show_map():
 def historical_data():
     return render_template('historical.html')
 
+@app.route('/airquality_simulator')
+def airquality_simulator():
+    return render_template('airquality_simulator.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
 @app.route('/api_key')
 def get_api_key():
     return jsonify({'api_key': api_key})
